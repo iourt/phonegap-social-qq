@@ -81,7 +81,7 @@ public class QQLogin extends CordovaPlugin{
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
-				mCallbackContext.error();
+				mCallbackContext.error(0);
 				e.printStackTrace();
 			}
 
