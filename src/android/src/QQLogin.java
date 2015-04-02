@@ -7,9 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -23,34 +20,27 @@ import com.tencent.tauth.UiError;
 import com.tencent.tauth.Tencent;
 
 public class QQLogin extends CordovaPlugin{
-	
 	public static final String APPID ="101195786"; 
     private Tencent mTencent = null;
     private CallbackContext  mCallbackContext = null;
     
-
 	@Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
 		mCallbackContext=callbackContext;
 
         if (action.equals("ssoLogin")) {
         	this.ssoLogin();
-
-
         }else if(action.equals("ssoLogout")){
     		Context context = this.cordova.getActivity().getApplicationContext();
 
         	mTencent.logout(context);
 			mCallbackContext.success();
-
-        	
         }
         else {
             return false;
         }
         return true;
     }
-	
 	
 	public void ssoLogin(){
         // 创建授权认证信息
@@ -62,26 +52,17 @@ public class QQLogin extends CordovaPlugin{
 		final IUiListener listener = new BaseUiListener() {
 			@Override
 			protected void doComplete(JSONObject values) {
-				
 
 			}
-			
-			
-			
 		};
 		
 		this.cordova.getActivity().runOnUiThread(new Runnable() {
 	        @Override
 	        public void run() {
-
 	        	mTencent.login(activity, "all", listener);
 	        }
 	    });
-		
-		
 	}
-	
-	
 
 	private class BaseUiListener implements IUiListener {
 
@@ -100,7 +81,7 @@ public class QQLogin extends CordovaPlugin{
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
-				mCallbackContext.error(e);
+				mCallbackContext.error();
 				e.printStackTrace();
 			}
 
@@ -113,9 +94,12 @@ public class QQLogin extends CordovaPlugin{
 
 		@Override
 		public void onError(UiError e) {
-			mCallbackContext.error(0);
+            JSONObject resx =new JSONObject();
+            resx.put("code:", e.errorCode);
+            resx.put("msg:", e.errorMessage);
+            resx.put("detail:", e.errorDetail);
 
-
+			mCallbackContext.error(resx);
 		}
 
 		@Override
@@ -124,9 +108,5 @@ public class QQLogin extends CordovaPlugin{
 			mCallbackContext.error(0);
 
 		}
-
-		
 	}
-
-
 }
