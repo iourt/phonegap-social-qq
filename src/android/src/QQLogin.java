@@ -96,9 +96,9 @@ public class QQLogin extends CordovaPlugin{
 		public void onError(UiError e) {
 			JSONObject resd =new JSONObject();
             try {
-        		resd("uid111 code:", Integer.toString(e.errorCode));
-        		resd("uid111 msg:", e.errorMessage);
-        		resd("uid111 detail:", e.errorDetail);
+        		resd.put("uid111 code:", Integer.toString(e.errorCode));
+        		resd.put("uid111 msg:", e.errorMessage);
+        		resd.put("uid111 detail:", e.errorDetail);
 				mCallbackContext.error(resd);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
