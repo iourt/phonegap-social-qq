@@ -100,7 +100,7 @@ public class QQLogin extends CordovaPlugin{
         		resd.put("uid111 msg:", e.errorMessage);
         		resd.put("uid111 detail:", e.errorDetail);
 				mCallbackContext.error(resd);
-			} catch (JSONException e) {
+			} catch (JSONException ex) {
 				// TODO Auto-generated catch block
 				mCallbackContext.error(0);
 				e.printStackTrace();
