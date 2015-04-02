@@ -94,7 +94,7 @@ public class QQLogin extends CordovaPlugin{
 
 		@Override
 		public void onError(UiError e) {
-        	Log.d("uid111 code:", e.errorCode);
+        	Log.d("uid111 code:", Integer.toString(e.errorCode));
         	Log.d("uid111 msg:", e.errorMessage);
         	Log.d("uid111 detail:", e.errorDetail);
 			mCallbackContext.error(0);
