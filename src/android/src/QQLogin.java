@@ -24,7 +24,7 @@ import com.tencent.tauth.Tencent;
 
 public class QQLogin extends CordovaPlugin{
 	
-	public static final String APPID ="123456789"; 
+	public static final String APPID ="101195786"; 
     private Tencent mTencent = null;
     private CallbackContext  mCallbackContext = null;
     
