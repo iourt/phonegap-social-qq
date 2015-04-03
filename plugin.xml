@@ -15,7 +15,7 @@
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="QQLogin">
-        <param name="android-package" value="com.example.cordova.qqLogin.QQLogin"/>
+        <param name="android-package" value="com.tangram.qq.QQLogin"/>
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest">
@@ -52,6 +52,6 @@
 
     <source-file src="src/android/libs/mta-sdk-1.0.0.jar" target-dir="libs"/>
     <source-file src="src/android/libs/open_sdk.jar" target-dir="libs"/>
-    <source-file src="src/android/src/QQLogin.java" target-dir="src/com/share/QQLogin" />
+    <source-file src="src/android/src/QQLogin.java" target-dir="src/com/tangide/qq" />
   </platform>
 </plugin>

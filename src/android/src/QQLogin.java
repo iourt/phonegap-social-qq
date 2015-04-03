@@ -1,4 +1,4 @@
-package com.example.cordova.qqLogin;
+package com.tangram.qq;
 import java.text.SimpleDateFormat;
 
 import org.apache.cordova.CallbackContext;
