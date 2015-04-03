@@ -52,6 +52,6 @@
 
     <source-file src="src/android/libs/mta-sdk-1.0.0.jar" target-dir="libs"/>
     <source-file src="src/android/libs/open_sdk.jar" target-dir="libs"/>
-    <source-file src="src/android/src/QQLogin.java" target-dir="src/com/tangide/qq" />
+    <source-file src="src/android/src/QQLogin.java" target-dir="src/com/tangram/qq" />
   </platform>
 </plugin>
