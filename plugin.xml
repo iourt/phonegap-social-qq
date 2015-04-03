@@ -19,7 +19,6 @@
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="QQLogin">
         <param name="android-package" value="com.tangram.qq.QQLogin"/>
-        <param name="onload" value="true"/>
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/*">
