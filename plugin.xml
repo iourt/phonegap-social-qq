@@ -2,13 +2,16 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="com.tangram.qq" version="0.0.1">
   <name>QQLogin</name>
-  <description>Plugin for QQ , Qzone share</description>
-  <author>lv</author>
+  <description>Plugin for QQ login, Qzone share</description>
+  <author>luncher</author>
   <license>Apache 2.0</license>
   <keywords>cordova,device,qq,social</keywords>
+  <engines>
+  	<engine name="cordova" version=">=3.0.0"/>
+  </engines>
 
   <js-module src="www/qqLogin.js" name="QQLogin">
-    <clobbers target="QQLogin" />
+    <clobbers target="cordova.plugins.QQLogin" />
   </js-module>
 
   <!-- android -->
@@ -16,9 +19,10 @@
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="QQLogin">
         <param name="android-package" value="com.tangram.qq.QQLogin"/>
+        <param name="onload" value="true"/>
       </feature>
     </config-file>
-    <config-file target="AndroidManifest.xml" parent="/manifest">
+    <config-file target="AndroidManifest.xml" parent="/*">
       <uses-permission android:name="android.permission.INTERNET" />
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
       <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
