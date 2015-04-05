@@ -1,60 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        id="com.tangram.qq" version="0.0.1">
-  <name>QQLogin</name>
-  <description>Plugin for QQ login, Qzone share</description>
-  <author>luncher</author>
-  <license>Apache 2.0</license>
-  <keywords>cordova,device,qq,social</keywords>
-  <engines>
-  	<engine name="cordova" version=">=3.0.0"/>
-  </engines>
+        id="com.tangram.oauth" version="0.0.1"
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <js-module src="www/qqLogin.js" name="QQLogin">
-    <clobbers target="cordova.plugins.QQLogin" />
-  </js-module>
+<name>Tangram-Oauth</name>
+
+<description>Plugin for SSO login and share message</description>
+
+<author>luncher</author>
+
+<keywords>tangram,SSO</keywords>
+
+<js-module src="www/oauth.js" name="oauth">
+	<clobbers target="cordova.plugins.oauth" />
+</js-module>
 
   <!-- android -->
   <platform name="android">
-    <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="QQLogin">
-        <param name="android-package" value="com.tangram.qq.QQLogin"/>
-      </feature>
-    </config-file>
-    <config-file target="AndroidManifest.xml" parent="/manifest">
-      <uses-permission android:name="android.permission.INTERNET" />
-      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-      <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-      <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-      <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-      <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-      <uses-permission android:name="android.permission.GET_TASKS" />
-    </config-file>
 
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tencent101195786"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-    </config-file>
+	<config-file target="res/xml/config.xml" parent="/*">
+		<feature name="oauth">
+			<param name="android-package" value="com.tangram.oauth.oauth"/>
+		</feature>
+	</config-file>
 
-    <source-file src="src/android/libs/mta-sdk-1.0.0.jar" target-dir="libs"/>
-    <source-file src="src/android/libs/open_sdk.jar" target-dir="libs"/>
-    <source-file src="src/android/src/QQLogin.java" target-dir="src/com/tangram/qq" />
+	<config-file target="AndroidManifest.xml" parent="/manifest">
+		<user-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+		<uses-sdk android:minSdkVersion="10"
+		android:targetSdkVersion="15"/>
+	</config-file>
+
+	<config-file target="AndroidManifest.xml" parent="/manifest/application">
+		<activity
+       		android:name="com.tencent.tauth.AuthActivity"
+			android:noHistory="true"
+			android:launchMode="singleTask">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="tencent101195786"/>
+			</intent-filter>
+		</activity>
+		<activity 
+			android:name="com.tencent.connect.common.AssistActivity"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			android:configChanges="orientation|keyboardHidden|screenSize" 
+		/>
+	</config-file>
+	<source-file src="src/android/libs/open_sdk_r4547_lite.jar" target-dir="libs" />
+	<source-file src="src/android/libs/android-support-v4.jar" target-dir="libs" />
+	<source-file src="src/android/oauth.java" target-dir="src/com/tangram/oauth" />
   </platform>
 </plugin>
