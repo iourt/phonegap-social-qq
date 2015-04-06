@@ -51,12 +51,16 @@ public class oauth extends CordovaPlugin {
 			this.sharedToFriend(args);
 		}
 		else if(action.equals("shared-qzone")) {
-			this.sharedQzone(args);
+			this.sharedToQzone(args);
 		}
 		return true;
 	}
 	
-	private void sharedQzone(JSONArray args) {
+	private void sharedToGroup(JSONArray args) {
+		//TODO
+	}
+
+	private void sharedToQzone(JSONArray args) {
 		try {
 			JSONObject jsonObj = args.getJSONObject(0);
 			String title =  jsonObj.getString("title");
