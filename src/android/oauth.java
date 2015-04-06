@@ -1,5 +1,6 @@
 package com.tangram.oauth;
 
+import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 
 import org.apache.cordova.CallbackContext;
@@ -21,10 +22,14 @@ import com.tencent.tauth.Tencent;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
 
+import com.tencent.connect.share.QQShare;
+import com.tencent.connect.share.QzoneShare;
+
 public class oauth extends CordovaPlugin {
-	private static final String ACTION_SAY_HELLO = "say-hello";	
-	private static final String ACTION_QQ_LOGIN  = "qq-login";	
-	private static final String ACTION_QQ_SHARED = "qq-shared";	
+	private static final String ACTION_SAY_HELLO    = "say-hello";	
+	private static final String ACTION_QQ_LOGIN     = "qq-login";	
+	private static final String ACTION_SHARED_QZONE = "shared-qzone";	
+	private static final String ACTION_SHARED_FRIEND= "shared-friend";	
 
 	public  static final String APPID = "101195786";
 	private Tencent  m_tHandle = null; 
@@ -42,15 +47,99 @@ public class oauth extends CordovaPlugin {
 		else if(action.equals("qq-logout")) {
 			this.qqLogout();
 		}
-		else if(action.equals("qq-shared")) {
-			this.qqShared();
+		else if(action.equals("shared-friend")) {
+			this.sharedToFriend(args);
 		}
-		else if(action.equals("get-userinfo")) {
-			//this.getUserInfo(args);
+		else if(action.equals("shared-qzone")) {
+			this.sharedQzone(args);
 		}
 		return true;
 	}
 	
+	private void sharedQzone(JSONArray args) {
+		try {
+			JSONObject jsonObj = args.getJSONObject(0);
+			String title =  jsonObj.getString("title");
+			String summary = jsonObj.getString("summary");
+			String targetURL = "";
+			String imageURL = "";
+
+			if(jsonObj.has("target_url")) {
+				targetURL = jsonObj.getString("target_url");
+			}
+			if(jsonObj.has("image_url")) {
+				imageURL = jsonObj.getString("image_url");
+			}
+
+			Context context = this.cordova.getActivity().getApplicationContext();
+			m_tHandle = Tencent.createInstance(APPID, context);
+			
+			final Activity activity = this.cordova.getActivity();
+			Bundle bundle = new Bundle();
+			bundle.clear();
+			bundle.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
+			bundle.putInt(QzoneShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN);
+			bundle.putString(QzoneShare.SHARE_TO_QQ_TITLE, title);
+			bundle.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, summary);
+			if(targetURL != "") {
+				bundle.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, targetURL);
+			}
+			if(imageURL != "") {
+				ArrayList<String> imageUrls = new ArrayList<String>();
+				imageUrls.add(imageURL);
+				bundle.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imageUrls);
+			}
+			final IUiListener listener3 = new BaseUiListener() {
+				protected void doComplete(JSONObject values) {
+					m_cbCtx.success(values);
+				}
+			};
+			m_tHandle.shareToQzone(activity, bundle, listener3); 
+		}
+		catch(JSONException e) {
+			m_cbCtx.success("fail");
+		}
+	}
+
+	private void sharedToFriend(JSONArray args) {
+		try {
+			JSONObject jsonObj = args.getJSONObject(0);
+			String title =  jsonObj.getString("title");
+			String summary = jsonObj.getString("summary");
+			String AppName = "";
+			String imageURL = "";
+
+			if(jsonObj.has("image_url")) {
+				imageURL = jsonObj.getString("image_url");
+			}
+			if(jsonObj.has("appname")) {
+				AppName = jsonObj.getString("appname");
+			}
+
+			final Activity activity = this.cordova.getActivity();
+			Bundle bundle = new Bundle();
+			bundle.clear();
+			bundle.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_APP);
+			bundle.putString(QQShare.SHARE_TO_QQ_TITLE, title);
+			bundle.putString(QQShare.SHARE_TO_QQ_SUMMARY, summary);
+			if(AppName != "") {
+				bundle.putString(QQShare.SHARE_TO_QQ_APP_NAME, AppName);
+			}
+			if(imageURL != "") {
+				bundle.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, imageURL);
+			}
+			final IUiListener listener4 = new BaseUiListener() {
+				protected void doComplete(JSONObject values) {
+					m_cbCtx.success(values);
+				}
+			};
+			m_tHandle.shareToQQ(activity, bundle, listener4);
+		}
+		catch(JSONException e) {
+			m_cbCtx.success("fail");
+		}
+	}
+
 	private void sayHello() {
 		m_cbCtx.success("ni hao");
 	}
@@ -63,18 +152,9 @@ public class oauth extends CordovaPlugin {
 	
 	final private void getUserInfo() {
 		final Activity activity = this.cordova.getActivity();
-		//Context context = this.cordova.getActivity().getApplicationContext();
-		//m_tHandle = Tencent.createInstance(APPID, context);	
-		//JSONObject jsonObj = args.getJSONObject(0);
-		//String uid = jsonObj.getString("uid"); 
-		//String token = jsonObj.getString("token"); 
-		//m_tHandle.setOpenId(uid);
-		//m_tHandle.setAccessToken(token);
-
 		final IUiListener listener2 = new BaseUiListener() {
 			protected void doComplete(JSONObject values) {
 				m_cbCtx.success(values);
-				//m_cbCtx.success("hello owrld!");
 			}
 		};
 		m_userInfo = new UserInfo(activity, m_tHandle.getQQToken());
@@ -91,15 +171,7 @@ public class oauth extends CordovaPlugin {
 				String uid=m_tHandle.getOpenId();
 				String token=m_tHandle.getAccessToken();
 				
-				//m_cbCtx.success("hello");
 				getUserInfo();				
-			//	new Thread() {
-			//		public void run() {
-			//			JSONObject res = new JSONObject();
-			//			res = m_tHandle.request(Constants.GRAPH_SIMPLE_USER_INFO, null, Constants.HTTP_GET);
-			//			m_cbCtx.success(res);
-			//		}
-			//	}.start();
 			}
 		};
 

@@ -12,10 +12,10 @@ exports.qqLogout = function(success, error) {
 	exec(success, error, "oauth", "qq-logout", []);
 };
 
-exports.getUserInfo = function(options, success, error) {
-	exec(success, error, "oauth", "get-userinfo", [options]);
+exports.sharedToQzone = function(options, success, error) {
+	exec(success, error, "oauth", "shared-qzone", [options]);
 };
 
-exports.qqShared = function(success, error) {
-	exec(success, error, "oauth", "qq-shared", []);
+exports.sharedToFriend = function(options, success, error) {
+	exec(success, error, "oauth", "shared-friend", [options]);
 };
