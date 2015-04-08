@@ -4,8 +4,8 @@ exports.sayHello = function(success, error) {
 	exec(success, error, "oauth", "say-hello", []);
 };
 
-exports.qqLogin = function(success, error) {
-	exec(success, error, "oauth", "qq-login", []);
+exports.qqLogin = function(options, success, error) {
+	exec(success, error, "oauth", "qq-login", [options]);
 };
 
 exports.qqLogout = function(success, error) {

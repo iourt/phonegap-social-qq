@@ -31,7 +31,7 @@ public class oauth extends CordovaPlugin {
 	private static final String ACTION_SHARED_QZONE = "shared-qzone";	
 	private static final String ACTION_SHARED_FRIEND= "shared-friend";	
 
-	public  static final String APPID = "101195786";
+	public  static String APPID = "";
 	private Tencent  m_tHandle = null; 
 	private UserInfo m_userInfo= null; 
 	private CallbackContext m_cbCtx = null;
@@ -42,7 +42,7 @@ public class oauth extends CordovaPlugin {
 			this.sayHello();
 		}
 		else if(action.equals("qq-login")) {
-			this.qqLogin();
+			this.qqLogin(args);
 		}
 		else if(action.equals("qq-logout")) {
 			this.qqLogout();
@@ -67,6 +67,13 @@ public class oauth extends CordovaPlugin {
 			String summary = jsonObj.getString("summary");
 			String targetURL = "";
 			String imageURL = "";
+
+			if(!jsonObj.has("appid")) {
+				m_cbCtx.error("not found APPID");
+				return;
+			}
+			APPID = jsonObj.getString("appid");
+
 
 			if(jsonObj.has("target_url")) {
 				targetURL = jsonObj.getString("target_url");
@@ -165,25 +172,35 @@ public class oauth extends CordovaPlugin {
 		m_userInfo.getUserInfo(listener2);
 	}
 
-	private void qqLogin() {
-		final Activity activity = this.cordova.getActivity();
-		Context context = this.cordova.getActivity().getApplicationContext();
-		m_tHandle = Tencent.createInstance(APPID, context);
-
-		final IUiListener listener = new BaseUiListener() {
-			protected void doComplete(JSONObject values) {
-				String uid=m_tHandle.getOpenId();
-				String token=m_tHandle.getAccessToken();
-				
-				getUserInfo();				
+	private void qqLogin(JSONArray args) {
+		try {
+			JSONObject jsonObj = args.getJSONObject(0);
+			if(!jsonObj.has("appid")) {
+				m_cbCtx.error("not found APPID");
+				return;
 			}
-		};
+			APPID = jsonObj.getString("appid");
 
-		this.cordova.getActivity().runOnUiThread(new Runnable() {
-			public void run() {
-				m_tHandle.login(activity, "all", listener);
-			}
-		});
+			final Activity activity = this.cordova.getActivity();
+			Context context = this.cordova.getActivity().getApplicationContext();
+			m_tHandle = Tencent.createInstance(APPID, context);
+
+			final IUiListener listener = new BaseUiListener() {
+				protected void doComplete(JSONObject values) {
+					String uid=m_tHandle.getOpenId();
+					String token=m_tHandle.getAccessToken();
+					getUserInfo();
+				}
+			};
+
+			this.cordova.getActivity().runOnUiThread(new Runnable() {
+				public void run() {
+					m_tHandle.login(activity, "all", listener);
+				}
+			});
+		} catch (JSONException e) {
+			m_cbCtx.error("fail");
+		}
 	}
 
 	private class BaseUiListener implements IUiListener {
