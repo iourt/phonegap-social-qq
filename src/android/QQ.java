@@ -1,4 +1,4 @@
-package com.tangram.oauth;
+package com.tangram;
 
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
@@ -25,7 +25,7 @@ import com.tencent.connect.common.Constants;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
 
-public class oauth extends CordovaPlugin {
+public class QQ extends CordovaPlugin {
 	private static final String ACTION_SAY_HELLO    = "say-hello";	
 	private static final String ACTION_QQ_LOGIN     = "qq-login";	
 	private static final String ACTION_SHARED_QZONE = "shared-qzone";	
